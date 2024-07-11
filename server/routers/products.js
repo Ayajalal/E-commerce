@@ -36,6 +36,10 @@ console.log(err)
         res.status(500).json(err)
     }
 })
+router.get('/',async (req,res)=>{
+    const allProducts=await products.find()
+    res.status(200).json(allProducts)
+})
 
 const validateCreateProduct=((req)=>{
 const schema=joi.object({

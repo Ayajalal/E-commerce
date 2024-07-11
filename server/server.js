@@ -1,9 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires,no-undef
+
 const express=require('express')
 // eslint-disable-next-line @typescript-eslint/no-var-requires,no-undef
 const cors = require('cors');
 // eslint-disable-next-line @typescript-eslint/no-var-requires,no-undef
 const mongoose=require('mongoose')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+
 //init app
 const app = express();
 // eslint-disable-next-line no-undef
@@ -23,3 +26,4 @@ app.listen(port,()=>{
     console.log("server is listining ")
 })
 
+module.exports=app
