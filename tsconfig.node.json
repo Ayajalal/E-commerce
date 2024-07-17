@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "checkJs": true,
-    "tsx": "react-tsx",
-    "baseUrl": "src",
     "resolveJsonModule": true,
-    "lib": ["es6", "dom", "es2017"],
+    "lib": [ "es6", "dom", "es2017" ],
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "skipLibCheck": true,
@@ -12,7 +11,7 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noEmit": true
+    "noEmit": true,
   },
   "include": ["vite.config.ts"]
 }

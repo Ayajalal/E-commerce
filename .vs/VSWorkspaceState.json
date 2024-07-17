@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\server",
+    "\\server\\routers",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\footer",
+    "\\src\\components\\heroSectoon",
+    "\\src\\components\\main"
+  ],
+  "SelectedNode": "\\src\\components\\main\\main.tsx",
+  "PreviewInSolutionExplorer": false
+}

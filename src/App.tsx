@@ -3,7 +3,6 @@ import Header2 from "./components/header/Header2.tsx";
 import Header3 from "./components/header/Header3.tsx";
 import {ColorModeContext, useMode} from "./theme.tsx";
 import {CssBaseline, ThemeProvider} from "@mui/material";
-import {Css} from "@mui/icons-material";
 import Hero from "./components/hero/hero.tsx";
 import Main from "./components/main/main.tsx";
 import Footer from "./components/footer/Footer.tsx";

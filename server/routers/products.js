@@ -40,6 +40,17 @@ router.get('/',async (req,res)=>{
     const allProducts=await products.find()
     res.status(200).json(allProducts)
 })
+//delete
+router.delete("/:id",async (req,res)=>{
+const product=await products.findById(req.params.id)
+    if(product){
+        await products.findByIdAndDelete(req.params.id)
+        res.status(200).json("delete this product ")
+    }
+    else{
+        res.status(404).json("this product not found ")
+    }
+})
 
 const validateCreateProduct=((req)=>{
 const schema=joi.object({

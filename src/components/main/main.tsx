@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import imageCard from "../../assets/left-side.jpg"
  import {
     Box, Button,
@@ -12,17 +12,46 @@ import imageCard from "../../assets/left-side.jpg"
     useTheme
 } from "@mui/material";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
+import axios from "axios"
 import ViewProduct from "./ViewProduct.tsx";
 import {Close} from "@mui/icons-material";
-const showTypes=[  "All Products"   ,"MEN category","Women category"]
+import {Simulate} from "react-dom/test-utils";
+import click = Simulate.click;
+const showTypes=[{key: "all", value: "All Products"} ,{key: "men", value: "MEN category"},{key: "women", value: "WOMEN category"},]
 const Main=()=>{
-    const [types,setTypes] =useState(showTypes[0])
+    const [types,setTypes] =useState(showTypes[0].value)
     const theme=useTheme();
+    const [allProducts,setAllProducts]=useState([])
+    const [allProductsData,setAllProductsData]=useState([])
+
     const [open,setOpen]=useState(false)
+    useEffect(() => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any other necessary headers here
+            },
+        };
+
+        axios.get("https://e-commerce-e1ttlwfwj-ayaismeals-projects.vercel.app/products",config
+             ).then((res)=>{
+            console.log(res)
+            setAllProducts(res.data)
+            setAllProductsData(res.data)
+            console.log(allProducts)
+
+        }).catch((err )=>{
+            console.log(err)
+        })
+    },[])
     const handleType=(event,newValue)=>{
-        console.log(newValue)
-        if(newValue!=null){
-        setTypes(newValue)}
+        const  selectedProducts=allProductsData.find((data:any)=>data.category===newValue);
+        console.log(selectedProducts)
+        console.log(event)
+        if(selectedProducts){setAllProducts([selectedProducts])}
+        else{
+            setAllProducts([...allProducts])
+        }
     }
     const data=[{id:1,productTitle:"ee",productPrice:4,productRating:3},
         {id:2,productTitle:"ee",productPrice:4,productRating:3},
@@ -55,10 +84,11 @@ const Main=()=>{
                         return <ToggleButton
                             sx={{ color: theme.palette.text.primary }}
                             className="myButton"
-                            value={item}
-                            aria-label={item}
+                            value={item.key}
+                            aria-label={item.value}
+                            onChange={handleType}
                         >
-                            {item}
+                            {item.value}
                         </ToggleButton>
                     })
                 }
@@ -68,10 +98,9 @@ const Main=()=>{
 
         </Stack>
         <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-between"}>
-            {data.map((item) => {
+            {allProducts.map((item) => {
                 return (
                     <Card
-
                         layout
                         initial={{ transform: "scale(0)" }}
                         animate={{ transform: "scale(1)" }}
@@ -89,10 +118,10 @@ const Main=()=>{
                     >
                         <CardMedia
                             sx={{ height: 277 }}
-                            // @ts-ignore
-                            image={imageCard}
+                            image={`../assets/${item.image}`}
                             title="green iguana"
                         />
+                        <img src={`../../assets/${item.image}`} alt={item.title}/>
 
                         <CardContent>
                             <Stack
@@ -101,18 +130,16 @@ const Main=()=>{
                                 alignItems={"center"}
                             >
                                 <Typography gutterBottom variant="h6" component="div">
-                                    {item.productTitle}
+                                    {item.title}
                                 </Typography>
 
                                 <Typography variant="subtitle1" component="p">
-                                    ${item.productPrice}
+                                    ${item.price}
                                 </Typography>
                             </Stack>
 
                             <Typography variant="body2" color="text.secondary">
-                                Lizards are a widespread group of squamate reptiles, with
-                                over 6,000 species, ranging across all continents except
-                                Antarctica
+                                {item.description}
                             </Typography>
                         </CardContent>
 
@@ -133,7 +160,7 @@ const Main=()=>{
                             <Rating
                                 precision={0.1}
                                 name="read-only"
-                                value={item.productRating}
+                                value={item.rating}
                                 readOnly
                             />
                         </CardActions>
