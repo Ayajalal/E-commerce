@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react"
-import imageCard from "../../assets/left-side.jpg"
+import imageCard from "../../../server/uploads/"
  import {
     Box, Button,
     Card, CardActions,
     CardContent, CardMedia,
-    Container, Dialog, IconButton, Rating,
+    Container, Dialog, IconButton, Rating, Skeleton,
     Stack,
     ToggleButton,
     ToggleButtonGroup,
@@ -20,7 +20,9 @@ import click = Simulate.click;
 const showTypes=[{key: "all", value: "All Products"} ,{key: "men", value: "MEN category"},{key: "women", value: "WOMEN category"},]
 const Main=()=>{
     const [types,setTypes] =useState(showTypes[0].value)
+    const [clickedProduct,setClickedProduct]=useState({})
     const theme=useTheme();
+    const [loading,setLoading]=useState(false)
     const [allProducts,setAllProducts]=useState([])
     const [allProductsData,setAllProductsData]=useState([])
 
@@ -38,19 +40,22 @@ const Main=()=>{
             console.log(res)
             setAllProducts(res.data)
             setAllProductsData(res.data)
-            console.log(allProducts)
+            setLoading(true)
+            console.log(res.data[0].images[0])
 
         }).catch((err )=>{
             console.log(err)
         })
     },[])
     const handleType=(event,newValue)=>{
-        const  selectedProducts=allProductsData.find((data:any)=>data.category===newValue);
-        console.log(selectedProducts)
+        console.log(newValue)
+        debugger
+        const  selectedProducts=allProductsData.filter((data:any)=>data.category===newValue);
+        console.log(selectedProducts,"ell")
         console.log(event)
-        if(selectedProducts){setAllProducts([selectedProducts])}
+        if(selectedProducts?.length){setAllProducts([...selectedProducts])}
         else{
-            setAllProducts([...allProducts])
+            setAllProducts([...allProductsData])
         }
     }
     const data=[{id:1,productTitle:"ee",productPrice:4,productRating:3},
@@ -98,7 +103,7 @@ const Main=()=>{
 
         </Stack>
         <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-between"}>
-            {allProducts.map((item) => {
+            {!loading?<Skeleton variant="rectangular" width={210} height={118} /> :allProducts.map((item:any) => {
                 return (
                     <Card
                         layout
@@ -118,10 +123,12 @@ const Main=()=>{
                     >
                         <CardMedia
                             sx={{ height: 277 }}
-                            image={`../assets/${item.image}`}
+                            image={`../../../server/uploads/${item.images?item.images[0]:''}`}
                             title="green iguana"
                         />
-                        <img src={`../../assets/${item.image}`} alt={item.title}/>
+
+
+                      {/*<img src={`./src/assets/${item.image}`} alt={item.title}/>*/}
 
                         <CardContent>
                             <Stack
@@ -147,6 +154,7 @@ const Main=()=>{
                             <Button
                                 onClick={() => {
                                     handleClickOpen();
+                                    setClickedProduct(item)
                                 }}
                                 sx={{ textTransform: "capitalize" }}
                                 size="large"
@@ -187,7 +195,7 @@ const Main=()=>{
                 <Close />
             </IconButton>
 
-            <ViewProduct  />
+            <ViewProduct productDetails={clickedProduct}  />
         </Dialog>
     </Container>
 }

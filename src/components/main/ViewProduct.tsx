@@ -1,31 +1,38 @@
 import React from "react";
 import {Box, Button, Stack, Typography} from "@mui/material";
 import {AddShoppingCartOutlined} from "@mui/icons-material";
-const ViewProduct=()=>{
+import axios from "axios";
+const ViewProduct=({productDetails})=>{
     // const toggleDrawer=()=>{}
+
+    const addToCart=(id,quantity)=>{
+        console.log("test33")
+        axios.post('https://e-commerce-e1ttlwfwj-ayaismeals-projects.vercel.app/shoppingCart',
+            {id:id,quantity:quantity}).then((res)=>{
+         console.log(res)
+        })
+    }
     return<Box display={"flex"} alignItems={"center"} gap={3} sx={{ flexDirection:{ xs: "column", sm: "row" }}}
 >
         <Box  display={"flex"} width={360}>
-<img width={'100%'} src={"src/assets/product1/final.png"} alt={"image product"}/>
+<img width={'100%'} src={`../../../server/uploads/${productDetails.images[0]}`} alt={"image product"}/>
         </Box>
         <Box  sx={{ py: 2, textAlign: { xs: "center", sm: "left" } }}>
             <Typography gutterBottom variant="h5" >
-            Women's fathion
+                {productDetails.category}'s fathion
             </Typography>
 
             <Typography my={0.4} fontSize={"22px"} color={"crimson"} variant="h6">
-                $12.9
+                ${productDetails.price}
             </Typography>
 
 
     <Typography variant="body1" >
-        Lizards are a widespread group of squamate reptiles, with
-        over 6,000 species, ranging across all continents except
-        Antarctica
+        {productDetails.description}
     </Typography>
             <Stack direction={"row"} >
                 {
-                    ["src/assets/product1/final.png","src/assets/product1/images.jpg"].map((item=>{
+                    productDetails.images.map((item:any)=>{
                         return(
                             <Box
                                 key={item}
@@ -41,19 +48,19 @@ const ViewProduct=()=>{
                                     style={{borderRadius: 3}}
                                     height={"100%"}
                                     width={"100%"}
-                                    src={item}
+                                    src={`../../../server/uploads/${item}`}
                                     alt=""
                                 />
                             </Box>
                         )
-                    }))
+                    })
                 }
             </Stack>
             <Button
-                sx={{ mb: { xs: 1, sm: 0 }, textTransform: "capitalize" }}
+                sx={{ mb: { xs: 1, sm: 0 }, textTransform: "capitalize" ,mt:4}}
                 variant="contained"
             >
-                <AddShoppingCartOutlined sx={{ mr: 1 }} fontSize="small" />
+                <AddShoppingCartOutlined sx={{ mr: 1 }} fontSize="small" onClick={addToCart(productDetails.id,1)} />
                 Buy now
             </Button>
         </Box>

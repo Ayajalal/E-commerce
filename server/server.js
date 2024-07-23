@@ -1,10 +1,19 @@
 const express = require('express');
 const connectDb=require('./database/db')
 const cors = require('cors');
+const multer=require('multer')
+const donenv=require('dotenv')
+const path=require('path')
+const bodyParser = require("body-parser");
+const { v4: uuidv4 } = require('uuid');
+
 const mongoose = require('mongoose');
 const app = express();
+app.use("/uploads",express.static("uploads"))
+
 const port = process.env.PORT || 5000 ;
 connectDb()
+//upload image
 
 // CORS Middleware
 const corsOptions = {
@@ -21,10 +30,12 @@ app.options('*', cors(corsOptions));
 
 // Middleware to parse JSON
 app.use(express.json());
-
 // Products Routes
 const productsPath = require("./routers/products");
-app.use("/products", productsPath);
+const shoppingCartPath=require("./routers/shopingCart")
+
+app.use("/products",productsPath);
+app.use("/shoppingCart",shoppingCartPath)
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
